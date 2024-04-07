@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "truffle-plugin-verify": "^0.6.7"
   }
 }

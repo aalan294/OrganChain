@@ -11,7 +11,7 @@ import Transplant from './PAGES/Transplant'
 
 const App = () => {
   const [user, setUser] = useState('undefined')
-  const [contract, setContract] = useState("0xaB97e8913883a3BE1EE498230A74F2Ad213c1F8d")
+  const [contract, setContract] = useState("0x2B7A2021fe5C11Cd576DCb74EdE823C70AeA984F")
   return (
     <Router>
       <Routes>
