@@ -10,7 +10,7 @@ contract OrganChain is ERC721 {
     uint256 public donorCounter;
     uint256 public recipientCounter;
 
-    enum OrganStatus {Available, Transplanted}
+    enum OrganStatus {Register, Available, Transplanted}
     enum RecipientStatus {Registered, Transplanted}
 
     struct Organ {
@@ -40,8 +40,6 @@ contract OrganChain is ERC721 {
     mapping(address => bool) public isHospital;
 
     // Events
-    event OrganRegistered(uint256 indexed organId, address indexed donor, string organType);
-    event RecipientRegistered(uint256 indexed  recipientId, address indexed recipient, string organType);
     event StatusUpdated(uint256 indexed organId, address indexed donor, string organType);
     event OrganTransplanted(uint256 indexed organId, address indexed donor, address indexed recipient);
 
@@ -80,7 +78,6 @@ contract OrganChain is ERC721 {
                 RecipientStatus.Registered,
                 0x0000000000000000000000000000000000000000
             );
-        emit RecipientRegistered(recipientCounter, _recipientAddress, _organType);
     }
 
     // Register organ donation
@@ -88,8 +85,7 @@ contract OrganChain is ERC721 {
         string memory _donorName,
         address _donorAddress,
         string memory _donorAadharNumber,
-        string memory _organType,
-        uint256 _preservationTime
+        string memory _organType
     ) external onlyHospital {
         donorCounter++;
             organs[donorCounter] = Organ(
@@ -98,15 +94,14 @@ contract OrganChain is ERC721 {
                 _donorName,
                 _donorAadharNumber,
                 _organType,
-                _preservationTime,
+                6,
                 block.timestamp,
-                OrganStatus.Available,
+                OrganStatus.Register,
                 0x0000000000000000000000000000000000000000
             );
         if(balanceOf(_donorAddress) == 0){
             _mint(_donorAddress, 1);
         }
-        emit OrganRegistered(donorCounter, _donorAddress, _organType);
     }
 
     //Register Hospital
@@ -153,6 +148,7 @@ contract OrganChain is ERC721 {
         }
         return false;
     }
+    
 
     //Get OrganId from Account Aaddress
     function getOrganId(address _donorAddress)public view  returns(uint256[] memory){
@@ -207,6 +203,24 @@ contract OrganChain is ERC721 {
             }
         }
         return availableOrgans;
+    }
+    // Get all available Recipients
+    function getAvailableRecipients() external view returns (Recipient[] memory) {
+        uint256 count = 0;
+        uint256 index = 0;
+        for (uint256 i=1;i<recipientCounter+1;i++){
+            if(recipient[i].status == RecipientStatus.Registered){
+                count++;
+            }
+        }
+        Recipient[] memory availableRecipients = new Recipient[](count);
+        for (uint256 i=1;i<recipientCounter+1;i++){
+            if(recipient[i].status == RecipientStatus.Registered){
+                availableRecipients[index] = recipient[i];
+                index++;
+            }
+        }
+        return availableRecipients;
     }
 
    // Get All Organs Registered Available Transplanted

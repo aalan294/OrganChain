@@ -11,17 +11,17 @@ import Transplant from './PAGES/Transplant'
 
 const App = () => {
   const [user, setUser] = useState('undefined')
-  const [contract, setContract] = useState("0x1de7f095fc1CfaE080bE4aD20506F8f61F8D411a")
+  const [contract, setContract] = useState("0xaB97e8913883a3BE1EE498230A74F2Ad213c1F8d")
   return (
     <Router>
       <Routes>
         <Route path='/' element = {<Home setUser={setUser} contract = {contract} />}/>
         <Route path='/default' element = {<Default/>}/>
-        <Route path='/hospital' element = {<Hospital/>}/>
-        <Route path='/donor' element = {<Donor/>}/>
-        <Route path='/reciptient' element = {<Recipient/>}/>
-        <Route path='/donor-register' element = {<DonorRegister/>}/>
-        <Route path='/recipient-register' element = {<RecipientRegister/>}/>
+        <Route path='/hospital' element = {<Hospital contract = {contract}/>}/>
+        <Route path='/donor' element = {<Donor contract = {contract}/>}/>
+        <Route path='/recipient' element = {<Recipient contract = {contract}/>}/>
+        <Route path='/donor-register' element = {<DonorRegister contract = {contract}/>}/>
+        <Route path='/recipient-register' element = {<RecipientRegister contract = {contract}/>}/>
         <Route path='/transplant' element = {<Transplant/>}/>
       </Routes>
     </Router>

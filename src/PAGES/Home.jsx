@@ -1,13 +1,45 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import Web3 from 'web3'
-import json from '../../build/contracts/OrganChain.json'
+import json from '../OrganChain.json'
 import Loader from '../COMPONENTS/Loader/Loader'
+import logo from '../ASSETS/Designer.png'
 
-const EnableMetamask = ({setUser, contract}) => {
+const Home = ({setUser, contract}) => {
     const navigate = useNavigate()
     const [loader, setLoader] = useState(false)
+    const [events, setEvents] = useState([])
+    const [currentUser,setCurrentUser] = useState(undefined)
+
+    useEffect(()=>{
+        if(!localStorage.getItem('OrganChain')){
+          navigate('/')
+        }
+        else{
+          setCurrentUser(JSON.parse(localStorage.getItem('OrganChain')).address)
+        }
+      },[])
+
+    useEffect(() => {
+        const pastEvents = async () => {
+            try {
+                const web3 = new Web3(window.ethereum);
+                const contractInstance = new web3.eth.Contract(json.abi, contract);
+                await contractInstance.getPastEvents("OrganTransplanted", { fromBlock: 0 }).then((events) => {
+                    console.log(events);
+                    events.map((item) => {
+                        setEvents([...events , { organId: item.returnValues.organId, donor: item.returnValues.donor, recipient: item.returnValues.recipient }]);
+                    });
+                });
+            } catch (error) {
+                alert(error.message);
+            }
+        };
+        pastEvents();
+    }, []);
+    
+
     const handleEnableButton = async()=>{
         setLoader(true)
         if(typeof window.ethereum != undefined){
@@ -18,16 +50,28 @@ const EnableMetamask = ({setUser, contract}) => {
                 setUser(accounts[0])
                 const web3 = new Web3(window.ethereum)
                 const Instance = new web3.eth.Contract(json.abi, contract)
-                const userExist = await Instance.methods.isRecipient(accounts[0]).call()
-                if(userExist){
-                    localStorage.setItem('web3-chat', JSON.stringify({ address: accounts[0] }))
+                const isRecipient = await Instance.methods.isRecipient(accounts[0]).call()
+                const isDonor = await Instance.methods.isDonor(accounts[0]).call()
+                const isHospital = await Instance.methods.isHospital(accounts[0]).call()
+                if(isRecipient){
+                    localStorage.setItem('OrganChain', JSON.stringify({ address: accounts[0],role:"Recipient" }))
                     setLoader(false)
-                    navigate('/chat')
+                    navigate('/recipient')
+                }
+                else if(isDonor){
+                    localStorage.setItem('OrganChain', JSON.stringify({ address: accounts[0],role:"Donnor" }))
+                    setLoader(false)
+                    navigate('/donor')
+                }
+                else if(isHospital){
+                    localStorage.setItem('OrganChain', JSON.stringify({ address: accounts[0],role:"Hospital" }))
+                    setLoader(false)
+                    navigate('/hospital')
                 }
                 else{
-                    localStorage.removeItem('web3-chat')
+                    localStorage.removeItem('OrganChain')
                     setLoader(false)
-                    navigate('/register')
+                    navigate('/default')
                 }
             } catch (error) {
                 setLoader(false)
@@ -50,9 +94,41 @@ const EnableMetamask = ({setUser, contract}) => {
             <Loader/>
         ):(
             <div className="container">
-               <h1>Welcome to my Web3 Chat Application!</h1>
-                <p>Please enable MetaMask to use this application.</p>
-                <button onClick={handleEnableButton} id="enable-metamask-btn" className="cta-btn">Enable MetaMask</button>
+               <nav>
+                <h1>OrganChain</h1>
+                <button onClick={handleEnableButton}>Connect Wallet</button>
+               </nav>
+               <div className="view">
+                <div className="glass">
+                    <div className="image">
+                        <img src={logo} alt="" />
+                    </div>
+                    <div className="text">
+                        <h1>OrganChain</h1>
+                        <h2>A Blockchain Based Organ Donation and Tracking Platform</h2>
+                    </div>
+                </div>
+               </div>
+               <div className="dashboard">
+  <ul>
+    {events &&
+      events.map((event, index) => {
+        // Check if event.organId is not undefined before rendering the li element
+        if (event.organId !== undefined) {
+          return (
+            <li key={index}>
+              {`OrganId: ${event.organId} | Donor: ${event.donor} | Recipient: ${event.recipient}`}
+            </li>
+          );
+        }
+        return null; // Return null if event.organId is undefined
+      })}
+  </ul>
+</div>
+
+               <footer>
+
+               </footer>
             </div>
         )}
     </Container>
@@ -60,40 +136,75 @@ const EnableMetamask = ({setUser, contract}) => {
 }
 
 const Container = styled.div`
-    background-color: #f5f5f5;
     width: 100vw;
     height: 100vh;
-    .container {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 50px;
-    h1 {
-        font-size: 36px;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 20px;
-       }
-       p {
-        font-size: 18px;
-        color: #666;
-        margin-bottom: 30px;
-       }
-    .cta-btn {
-        background-color: #f7931a;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        text-transform: uppercase;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        &:hover {
-            background-color: #e08500;
-           }
-       }
-   }
+    overflow: scroll;
+    background-color: #b5d1f1af;
+    &::-webkit-scrollbar{
+            width: 0.2rem;
+            &-thumb{
+                background-color: white;
+                width: 0.1rem;
+                border-radius: 1rem;
+            }
+        }
+    .container{
+        width: 100%;
+        nav{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            background-color: #27496f;
+            h1{
+                padding: 0;
+                margin: 0;
+                margin-left: 1rem;
+                color: white;
+            }
+            button{
+                margin-right: 1rem;
+            }
+        }
+        .view{
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .glass{
+                width: 50%;
+                height: 55%;
+                backdrop-filter: blur(6px);
+                border: 1px solid #27496f;
+                border-radius: 20px;
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                .image{
+                    width: 200px;
+                    height: 200px;
+                    border-radius: 50%;
+                    img{
+                        width: 200px;
+                        height: 200px;
+                        object-fit: cover;
+                        border-radius: 50%;
+                    }
+                }
+                .text{
+                    width: 50%;
+                    text-align: center;
+                    h1{
+                        color: #27496f;
+                    }
+                    h2{
+                        color: black;
+                    }
+                }
+            }
+        }
+    }
    `
 
-export default EnableMetamask
+export default Home
