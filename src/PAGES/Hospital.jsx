@@ -51,13 +51,16 @@ const Hospital = ({contract}) => {
 const Container = styled.div`
     width: 100vw;
     height: 100vh;
+    background-color: black;
+    color: white;
     nav{
         width: 100%;
         display: flex;
         justify-content: space-between;
         padding: 0.3rem 0;
-        background-color: #27496f;
+        background-color: #212020c3;
         align-items: center;
+        font-size: 20px;
         .logo{
             margin-left: 1rem;
             color: white;
@@ -87,6 +90,9 @@ const Container = styled.div`
             margin: 0 1rem;
             cursor: pointer;
             font-size: larger;
+            &:hover{
+                color: red;
+            }
         }
     }
     .details{
@@ -94,7 +100,8 @@ const Container = styled.div`
         height: 75vh;
         position: absolute;
         bottom: 0;
-        border: 1px solid blue;
+        border: 3px solid #212020c3;
+        box-shadow: 0px 0px 10px white;
         border-radius: 10px 10px 0 0;
         left: 10%;
     }

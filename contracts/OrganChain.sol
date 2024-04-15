@@ -99,9 +99,6 @@ contract OrganChain is ERC721 {
                 OrganStatus.Register,
                 0x0000000000000000000000000000000000000000
             );
-        if(balanceOf(_donorAddress) == 0){
-            _mint(_donorAddress, 1);
-        }
     }
 
     //Register Hospital

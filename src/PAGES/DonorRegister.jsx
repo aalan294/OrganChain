@@ -74,14 +74,21 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #6495ED;
+    background: black;
 
     .wrapper {
-        background-color: #AED6F1;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px white,
+                    0px 0px 12px white;
         padding: 40px;
         display: flex;
         width: 590px;
         form {
+            .bt{
+                display: flex;
+                justify-content: center;
+            }
             h1 {
                 font-size: x-large;
                 text-align: center;
@@ -90,11 +97,11 @@ const Container = styled.div`
             input, select {
                 width: 496px;
                 height: 50px;
-                background: #D6EAF8;
+                background: white;
                 margin: 30px 2px;
                 border: #85C1E9;
                 outline: #85C1E9;
-                border: 2px solid #85C1E9;
+                border: 2px solid black;
                 border-radius: 30px;
                 font-size: 20px;
                 color: black;
@@ -105,12 +112,12 @@ const Container = styled.div`
                 color: black;
             }
             .btn {
-                width: 100%;
+                width: 50%;
                 height: 45px;
                 background: white;
+                border: 3px solid black;
                 cursor: pointer;
-                border: none;
-                outline: none;
+                box-shadow: 0px 0px 10px black;
                 border-radius: 50px;
                 font-weight: bold;
                 font-size: large;

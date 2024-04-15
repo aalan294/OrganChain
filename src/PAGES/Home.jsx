@@ -139,40 +139,81 @@ const Container = styled.div`
     width: 100vw;
     height: 100vh;
     overflow: scroll;
-    background-color: #b5d1f1af;
-    &::-webkit-scrollbar{
-            width: 0.2rem;
-            &-thumb{
-                background-color: white;
-                width: 0.1rem;
-                border-radius: 1rem;
+    background-color: black;
+    &::-webkit-scrollbar {
+        width: 0.2rem;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: white;
+        width: 0.1rem;
+        border-radius: 1rem;
+    }
+    .container {
+        width: 100%;
+        .glass {
+            background-color: black;
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0px 0px 10px white;
+        backdrop-filter: blur(10px); /* Corrected typo from "blux" to "blur" */
+        border-radius: 20px;
+        .text{
+            h1,h2{
+                color: white;
             }
         }
-    .container{
-        width: 100%;
-        nav{
+}
+.dashboard {
+    ul {
+        list-style: none;
+        padding: 10px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; /* Center content horizontally */
+        li {
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 18px;
+            background-color: #212020c3;
+            color: white;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+    }
+}
+
+
+        nav {
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 1;
             width: 100%;
             display: flex;
             justify-content: space-between;
             padding: 0.7rem 0;
-            background-color: #27496f;
-            h1{
+            background-color: #212020c3;
+            h1 {
                 padding: 0;
                 margin: 0;
                 margin-left: 1rem;
+                font-size: 24px;
                 color: white;
             }
-            button{
+            button {
+                color: white;
                 margin-right: 1rem;
             }
         }
-        .view{
+        .view {
             width: 100%;
             height: 80vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            .glass{
+            .glass {
                 width: 50%;
                 height: 55%;
                 backdrop-filter: blur(6px);
@@ -181,30 +222,33 @@ const Container = styled.div`
                 display: flex;
                 justify-content: space-evenly;
                 align-items: center;
-                .image{
+                .image {
                     width: 200px;
                     height: 200px;
                     border-radius: 50%;
-                    img{
+                    img {
                         width: 200px;
                         height: 200px;
                         object-fit: cover;
                         border-radius: 50%;
                     }
                 }
-                .text{
+                .text {
                     width: 50%;
                     text-align: center;
-                    h1{
-                        color: #27496f;
+                    h1 {
+                        font-size: 30px;
+                        font-weight: 600;
+                        color: white;
                     }
-                    h2{
-                        color: black;
+                    h2 {
+                        font-size: 24px;
+                        color: white;
                     }
                 }
             }
         }
     }
-   `
+`;
 
 export default Home

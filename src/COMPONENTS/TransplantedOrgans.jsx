@@ -58,13 +58,14 @@ width: 100%;
                 li{
                     width:90%;
                     padding: 10px;
-                    background-color:#11c1dcae ;
+                    background-color: white ;
+                    font-size: 18px;
+                    color: black;
                     border-radius: 4px;
-                    border: 1px solid #11c1dcae;
+                    border: 1px solid white;
                     margin-top: 1rem;
                 }
             }
         }
 `
-
 export default TransplantedOrgans
